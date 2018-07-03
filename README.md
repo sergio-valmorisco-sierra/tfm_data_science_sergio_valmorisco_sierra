@@ -111,13 +111,45 @@ Once that these product categories have been obtained, it is necessary to find a
 
 Finally, in Section 3.5, different prediction models to predict the final selling price of an auction before it starts have been built, and their results have been analysed to idenfity the best one.
 
-## 3.1. Technology and requirements
-As mentioned in [Section 2](#2-dataset-description), the dataset is composed of two files. The size of the file "outcomes.tsv" is 17.9 MB and the size of "traces.tsv" is 128 MB. Therefore,
+## 3.1. Requirements and steps to run the project
+As mentioned in [Section 2](#2-dataset-description), the dataset is composed of two files. The size of the file "outcomes.tsv" is 17.9 MB and the size of "traces.tsv" is 128 MB. Therefore, cluster-computing frameworks, such as Apache Spark, are not needed to analyse these files since their size is relatively small. The Master Thesis has been entirely done with Python, except for the visualization dashboard that has been created with Tableau.
+
+The packages that are necessary to run this project can be installed with the conda environment file **"environment.yml"** available in this GitHub repository.
+
+The project has been divided into four IPython notebooks that should be run in order:
+1. **"01_exploring_and_cleaning_the_dataset.ipynb"**: this file contains the initial exploration of the data, as well as the cleaning process that has been applied to the data. For details, read [Section 3.2](#32-exploring-and-cleaning-the-dataset).
+2. **"02_obtaining_the_product_categories.ipynb"**: this file contains the code that has to be executed to extract the product categories of the items contained in the dataset. For details, read [Section 3.3](#33-obtaining-the-product-categories).
+3. **"03_product_categories_to_word_embedding_vectors.ipynb"**: this file contains the code that calculates the word embedding vectors associated to the product categories. For details, read [Section 3.4](#34-transforming-the-product-categories-to-word-embedding-vectors)
+4. **"04_prediction_model_auction_selling_price.ipynb"**: this file contains the different prediction models that have been developed to predict the final selling price of the auctions. For details, read [Section 3.5](#35-building-a-prediction-model-for-the-final-selling-price-of-the-auctions).
+
+Also, a visualization dashboard has been created with Tableau. The dashboard is available in this GitHub project, and requires the clean version of the dataset to run.
+
+The IPython notebooks need certain files as input and create certain outputs used by otherIPython notebooks. In the following tables, the file dependencies are summarized:
+
+| IPython notebook        | Inputs | Outputs |          
+| ------------- |------------- | ------------- | 
+| 01_exploring_and_cleaning_the_dataset.ipynb | F1, F2 | F3, F4 |
+| 02_obtaining_the_product_categories.ipynb | F3 | F5 | 
+| 03_product_categories_to_word_embedding_vectors.ipynb | F5, F6 | F7 |
+| 04_prediction_model_auction_selling_price.ipynb | F3, F7 | - |
+
+| Visualization dashboard        | Inputs | Outputs |  
+| ------------- |------------- | ------------- | 
+| Dashboard | F3, F4 | - |
+
+| File        | Name | Description |          
+| ------------- |------------- | ------------- | 
+| F1 | "outcomes.tsv" | Swoopo dataset ([Section 2.1](#21-outcomestsv)). Publicly available: http://people.bu.edu/zg/swoopo.html |
+| F2 | "traces.tsv" | Swoopo dataset ([Section 2.2](#22-tracestsv)). Publicly available: http://people.bu.edu/zg/swoopo.html |
+| F3 | "outcomes_clean.tsv" | Clean version of F1. The file "01_exploring_and_cleaning_the_dataset.ipynb" has to be run to obtain this file.  |
+| F4 | "traces_clean.tsv" | Clean version of F2. The file "01_exploring_and_cleaning_the_dataset.ipynb" has to be run to obtain this file. |
+| F5 | "product_categories.xlsx" | File that contains the item product categories obtained from Amazon. Available in this GitHub repository. |
+| F6 | "GoogleNews-vectors-negative300.bin.gz" | Google's pre-trained Word2Vec model (1.5GB). Publicly available: https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit |
+| F7 | "productDescriptionToVector.xlsx" | File that contains the word embedding vectors for the product categories contained in F5. Available in this GitHub repository.  |
 
 
-Since the size of the model is 1.5GB, it is not included in the GitHub folder. Nevertheless, for the next piece of code to work, the model should be downloaded and put in the corresponding folder.
 
-The link to download the model is: https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing
+
 
 ## 3.2. Exploring and cleaning the dataset
 Sections 3.2.1 and 3.2.2 describe both the cleaning and the analysis process that has been followed for the two files contained in the dataset.
