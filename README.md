@@ -112,7 +112,7 @@ Once that these product categories have been obtained, it is necessary to find a
 Finally, in Section 3.5, different prediction models to predict the final selling price of an auction before it starts have been built, and their results have been analysed to idenfity the best one.
 
 ## 3.1. Technology and requirements
-As mentioned in [Section 2](#2.-dataset-description), the dataset is composed of two files. The size of the file "outcomes.tsv" is 17.9 MB and the size of "traces.tsv" is 128 MB. Therefore,
+As mentioned in [Section 2](#2-dataset-description), the dataset is composed of two files. The size of the file "outcomes.tsv" is 17.9 MB and the size of "traces.tsv" is 128 MB. Therefore,
 
 
 Since the size of the model is 1.5GB, it is not included in the GitHub folder. Nevertheless, for the next piece of code to work, the model should be downloaded and put in the corresponding folder.
