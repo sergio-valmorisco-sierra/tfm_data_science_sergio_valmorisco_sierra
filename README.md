@@ -116,15 +116,13 @@ As mentioned in [Section 2](#2-dataset-description), the dataset is composed of 
 
 The packages that are necessary to run this project can be installed with the conda environment file **"environment.yml"** available in this GitHub repository.
 
-The project has been divided into four IPython notebooks that should be run in order:
+The project has been divided into four IPython notebooks that **should be run in order**. Also, the cells contained in each of these IPython notebooks **should be run in order too**:
 1. **"01_exploring_and_cleaning_the_dataset.ipynb"**: this file contains the initial exploration of the data, as well as the cleaning process that has been applied to the data. For details, read [Section 3.2](#32-exploring-and-cleaning-the-dataset).
 2. **"02_obtaining_the_product_categories.ipynb"**: this file contains the code that has to be executed to extract the product categories of the items contained in the dataset. For details, read [Section 3.3](#33-obtaining-the-product-categories).
 3. **"03_product_categories_to_word_embedding_vectors.ipynb"**: this file contains the code that calculates the word embedding vectors associated to the product categories. For details, read [Section 3.4](#34-transforming-the-product-categories-to-word-embedding-vectors)
 4. **"04_prediction_model_auction_selling_price.ipynb"**: this file contains the different prediction models that have been developed to predict the final selling price of the auctions. For details, read [Section 3.5](#35-building-a-prediction-model-for-the-final-selling-price-of-the-auctions).
 
-Also, a visualization dashboard has been created with Tableau. The dashboard is available in this GitHub project, and requires the clean version of the dataset to run.
-
-The IPython notebooks need certain files as input and create certain outputs used by otherIPython notebooks. In the following tables, the file dependencies are summarized:
+Also, as detailed in [Section 5](#5-front-end), a visualization dashboard has been created with Tableau. The dashboard is available in this GitHub project, and requires the clean version of the dataset to run. The IPython notebooks also need certain files as input and create certain outputs used by other IPython notebooks. In the following tables, the file dependencies are summarized:
 
 | IPython notebook        | Inputs | Outputs |          
 | ------------- |------------- | ------------- | 
@@ -291,9 +289,54 @@ For this set of models, the model with the best results in terms of the median a
 
 As compared with Section 3.5.4 in which a single model is used, the results obtained with multiple models in this section are better, but in general, the results are worse than the ones obtained with the set of models in other sections. For the given dataset, this set of models is not interesting, since it is more complex and performs worse than some of the set of models explained in other sections. As the amount of data increases, it could be interesting to analyze the performance of this set of models again.
 
-### 3.5.5. Choosing and optimizing the final model
+### 3.5.6. Choosing and optimizing the final model
+In general, the random forest regressor and the decision tree regressor are the algorithms that have provided the best results. These two models are relatively robust to outliers, since they isolate atypical observations into small leaves. The random forest regressor generally performs a bit better than the decision tree regressor and is less likely to overfit the data. The disadvantage is that random forest regressor are more difficult to interpret than decision tree regressors.
 
-# 4. Results
+Two different clustering options have been analyzed: one that uses the word embedding vectors to cluster the items according to their product categories, and another one that, appart from the word embedding vectors, it also uses the retail prices of the items to obtain the clusters. With the available data, the model that obtains the clusters by only using as input the word embedding vectors performs better. Moreover, it also requires less preprocessing steps and having to retrain the model less often.
+
+The results obtained with the models that take into account the product categories are better than the ones obtained with the models that do not take them into account. Nevertheless, taking into account the product categories requires a bigger effort, since a preprocessing step is necessary to make a new prediction: given the product description of an item in the column "desc", its Amazon category must be obtained, and afterwards, the corresponding word embedding vector.
+
+Furthermore, the clusters product category clusters obtained during the trianing part of the model are the ones that are used each time that a new prediction is made. After some time, more and more new products will begin to be auctioned and the clusters may eventually become outdated, causing the model to perform worse. Therefore, appart from the preprocessing step, using the product categories also involves having to retrain the prediction model from time to time.
+
+For the models that take only take into account the word embedding vectors to form the clusters, two different versions have been analyzed: one consisting on a single prediction model and another one that consists on a set of different models, where the model chosen to make every prediction depends on the cluster that each row in the test data belongs to.
+
+The results obtained with the set of multiple models were slightly better than the ones obtained when using a single model. Nevertheless, one of the prediction models corresponding to a certain cluster might perform much worse than the others.
+
+Also, in both versions, the clusters will eventually become outdated, and when a retraining is necessary, a single prediction model will have to be retrained in one of the versions, while in the other one, as many prediction models as existing clusters will have to be retrained. Considering this disadvantage, as well as the bigger complexity that using a set of multiple models implies, and the fact that the results are fairly similar for both versions, it has been decided to choose the version consisting on a single prediction model as the final one.
+
+Therefore, the final chosen set of models is the one explained in [Section 3.5.2](#352-single-model---clustering-by-product-categories). Of the different prediction algorithms used in [Section 3.5.2](#352-single-model---clustering-by-product-categories), the one with the best results is the random forest regressor. This is the one that has been implemented as the final model.
+
+The variables that have a clear impact on the results for this model are: the number of clusters chosen for the K-Means clustering algorithm, as well as the input parameters for the random forest regressor. A grid of different values for the number of clusters and the number of trees used in the random forest algorithm has been created.
+
+The prediction model metrics results for the best combination of variables found are:
+```sh
+Median absolute error = 10.37 $
+Mean absolute error = 28.29 $
+```
+# 4. Conclusions
+As indicated in [Section 3.2](#32-exploring-and-cleaning-the-dataset), Swoopo obtains a negative profit (i.e., Swoopo obtains less money for the auction than the retail price of the item) for 47.53% of the auctions. The number of bids placed in an auction can be calculated as the final price of the auction divided by the bid price increment. The total money that Swoopo obtains for an auction is calculated as the number of bids placed multiplied by the bid fee, plus the final selling price of the item that is paid by the winner. Since both the bid fee and the bid price increment are known variables, the fact whether Swoopo losses or wins money for a certain auction can be directly derived if the final selling price of the auction is known. The prediction model developed in [Section 3.5.5](#355-choosing-and-optimizing-the-final-model) can be used to predict the selling price of an auction. These predictions could be used to decide whether to offer certain auctions or not depending on whether the profit would be positive or negative based on the prediction results. This could dramatically lower the percentage of auctions for which Swoopo losses money.
+
+As mentioned in [Section 3.2](#32-exploring-and-cleaning-the-dataset), in average, the benefit that the winner obtains over the retail price of the item is around 160$. This is a very positive piece of news for the participants. Perhaps the data about the benefit that the each winner obtained over the retail price of the item for every auction could be made publicly available to encourage users to participate.
+
+In the analysis performed for [Section 3.2](#32-exploring-and-cleaning-the-dataset), a ranking of winner users was made. This information could be used for considering the possibility of adding a reward system. For example, a ranking of the winners could be made publicly available in the website, and the top winners could be rewarded from time to time to encourage general participation and competitiveness. The rewards could for example consist on pack of free bids, which would also motivate them to keep participating in future auctions.
+
+In the analysis performed for [Section 3.2](#32-exploring-and-cleaning-the-dataset), it was observed that November, December and January are the months in which more bids are placed. It could be interesting to increase the number of auctions during these months. The information about the profit ratio for each week of the year and special days (fixed holidays) has also been obtained and could be used to manage the moments in which it is preferable to offer more or less auctions.
+
+The average auction duration (calculated as the time that passed between the first bid and the last bid placed for that auction) is 7 hours and 10 minutes. Each bid extends the countdown clock by 10–20 seconds, so auctions can theoretically continue on indefinitely. As observed in the the analysis performed for [Section 3.2](#32-exploring-and-cleaning-the-dataset), the majority of the bids are placed when the auction is supposedly (but not really) about to end, and the countdown clock has a very low value for a great part of the auction duration. Therefore, the countdown clock should be set so that the auction theoretical ending time is a time in which a lot of users are able to participate in the auctions: for example, a couple of hours after the average ending work schedule time, and some hours before people go to bed.
+
+Swoopo provides the user with the possibility of using Bid Butlers (automatic bidding agents that place automated bids according to user-defined restrictions when the auction timer drops below 10 seconds). There is a chance of around 33% that the last bid placed in an auction (i.e., the winning bid) is placed by a Bid Butler. Consequently, using Bid Butlers seems to be a good choice for the participants to win auctions. 
+
+For the auctions contained in the traces, the mean number of bids placed by the winners in the auctions that were won by placing the final bid with a Bid Butler is around 79 bids. The mean number of bids placed by the winners in the auctions that were not won by placing the final bid with a Bid Butler is much lower, around 28 bids. Therefore, although using Bid Butlers seems to be a good choice to win auctions, it generally implies placing a much larger number of bids. This is good for Swoopo's business. For the auctions recorded in the traces, the mean profit obtained by Swoopo over the retail price of the items in the auctions that were won by placing the final bid with a Bid Butler is around 130$. The mean profit obtained by Swoopo for the auctions that were not won by placing the final bid with a Bid Butler is much lower, around 64$.
+
+In conclusion, offering and using BidButlers is a win-win strategy both for Swoopo and the auction participants.
+
+As explained in [Section 3.5.2](#352-single-model---clustering-by-product-categories), including the word embedding vectors for the product categories improved the performance of the selling price prediction model. This suggests that the prediction model could be further improved by completing the dataset with extra information. During the product category extraction proccess detailed in [Section 3.3](#33-obtaining-the-product-categories), the Amazon product links where the product categories have been obtained from have been saved for future uses. When people are deciding whether to purchase or not an item online, a lot of them first look for user reviews and average rating scores. All of this information can also be extracted from the Amazon product link. Extracting the average rating is straightforward, and a sentiment analysis could be done for user reviews to find out whether the comments are mostly positive or negative. Having all of this information can help to improve the prediction model: it is very likely that, on average, products with good ratings and good user reviews will most likely reach higher selling prices since more participants will be eager to purchase them based on their online research.
+
+As it can be observed by having a look at the clustering result examples contained in the code that has been developed for [Section 3.5](#35-building-a-prediction-model-for-the-final-selling-price-of-the-auctions), the word embedding vectors obtained for the product categories in [Section 3.4](#34-transforming-the-product-categories-to-word-embedding-vectors) are very useful to group similar items. These word embedding vectors can have more applications appart from improving the prediction model results. For example, they could be used within a recommendation system that recommends users similar products to the ones that they have placed bids for in the past (especially if they did not win those auctions).
+
+The final prediction model obtained in [Section 3.5.6](#355-choosing-and-optimizing-the-final-model) allows making final selling price predictions with a median absolute error of 10.37$. This can help Swoopo to forecast its benefits, as well as deciding whether to offer certain auctions or not depending on whether the profit would be positive or negative based on the prediction results.
+
+In conclusion, insights that can help Swoopo to improve its business in terms of profit and management have been found in this Master Thesis.
 
 # 5. Front-end
 
