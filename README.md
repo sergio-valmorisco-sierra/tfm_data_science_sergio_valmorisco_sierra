@@ -100,20 +100,7 @@ The file contains the following columns:
 
 The other parameters of the auction can be looked up in outcomes.tsv using the auction_id field.
 
-# 3. Methodology
-The first step of the development process consists on the data acquisition. In this Master Thesis, the dataset that has been used is available to the public, and the authors of the dataset have already recorded traces of live auctions using their own recording infrastructure. Therefore, the data acquisition phase is minimal in this Master Thesis.
-
-Nevertheless, as indicated in Section 2.1, the dataset contains a brief description about the product that is being auctioned. It could be interesting for the prediction model to have a product category to which the item being auctioned corresponds and not just a product description. This is because the final selling price of an item could greatly depend on its product category. The data acquisition process that has been followed to obtain the product category corresponding to each item is described in detail in Section 3.3.
-
-After the data acquisition phase, a data cleaning process is necessary so that the results that are obtained in the end are of high quality. In Section 3.2, the process used to clean the data is explained. Afterwards, the data has to be analysed in order to obtain valuable insights. The analysis process is explained in Section 3.2.
-
-After the data has been cleaned and analysed in Section 3.2, the product categories of the items have been obtained in Section 3.3. As an example, the product description for one of the items appearing in the dataset is "Sony Ericsson S500i Unlocked Mysterious Green". Although a human could identify by reading this description that the product is a mobile phone, a machine is not able to do this. Amazon.com assigns a product category to each one of the products that it sells. For example, for the product previously indicated, the corresponding Amazon product category is "Cell Phones & Accessories › Cell Phones › Unlocked Cell Phones". This category could be useful to complete the missing product category information for the products contained in the dataset, and web scraping methods can be used to extract these categories. This is explained in more detail in Section 3.3.
-
-Once that these product categories have been obtained, it is necessary to find a way to introduce them as input information for the prediction model. A numerical representation of a product category semantic meaning can consist on a word embedding vector that encompasses the meaning of all of the words contained in the product category string. This is explained in more detail in Section 3.4.
-
-Finally, in Section 3.5, different prediction models to predict the final selling price of an auction before it starts have been built, and their results have been analysed to idenfity the best one.
-
-## 3.1. Requirements and steps to run the project
+## 3. Requirements and steps to run the project
 As mentioned in [Section 2](#2-dataset-description), the dataset is composed of two files. The size of the file "outcomes.tsv" is 17.9 MB and the size of "traces.tsv" is 128 MB. Therefore, cluster-computing frameworks, such as Apache Spark, are not needed to analyse these files since their size is relatively small. The Master Thesis has been entirely done with Python, except for the visualization dashboard that has been created with Tableau.
 
 The packages that are necessary to run this project can be installed with the conda environment file **"environment.yml"** available in this GitHub repository.
@@ -147,14 +134,23 @@ Also, as detailed in [Section 5](#5-front-end), a visualization dashboard has be
 | F6 | "GoogleNews-vectors-negative300.bin.gz" | Google's pre-trained Word2Vec model (1.5GB). Publicly available: https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit |
 | F7 | "productDescriptionToVector.xlsx" | File that contains the word embedding vectors for the product categories contained in F5. Available in this GitHub repository.  |
 
+# 4. Methodology
+The first step of the development process consists on the data acquisition. In this Master Thesis, the dataset that has been used is available to the public, and the authors of the dataset have already recorded traces of live auctions using their own recording infrastructure. Therefore, the data acquisition phase is minimal in this Master Thesis.
 
+Nevertheless, as indicated in Section 2.1, the dataset contains a brief description about the product that is being auctioned. It could be interesting for the prediction model to have a product category to which the item being auctioned corresponds and not just a product description. This is because the final selling price of an item could greatly depend on its product category. The data acquisition process that has been followed to obtain the product category corresponding to each item is described in detail in Section 3.3.
 
+After the data acquisition phase, a data cleaning process is necessary so that the results that are obtained in the end are of high quality. In Section 3.2, the process used to clean the data is explained. Afterwards, the data has to be analysed in order to obtain valuable insights. The analysis process is explained in Section 3.2.
 
+After the data has been cleaned and analysed in Section 3.2, the product categories of the items have been obtained in Section 3.3. As an example, the product description for one of the items appearing in the dataset is "Sony Ericsson S500i Unlocked Mysterious Green". Although a human could identify by reading this description that the product is a mobile phone, a machine is not able to do this. Amazon.com assigns a product category to each one of the products that it sells. For example, for the product previously indicated, the corresponding Amazon product category is "Cell Phones & Accessories › Cell Phones › Unlocked Cell Phones". This category could be useful to complete the missing product category information for the products contained in the dataset, and web scraping methods can be used to extract these categories. This is explained in more detail in Section 3.3.
 
-## 3.2. Exploring and cleaning the dataset
+Once that these product categories have been obtained, it is necessary to find a way to introduce them as input information for the prediction model. A numerical representation of a product category semantic meaning can consist on a word embedding vector that encompasses the meaning of all of the words contained in the product category string. This is explained in more detail in Section 3.4.
+
+Finally, in Section 3.5, different prediction models to predict the final selling price of an auction before it starts have been built, and their results have been analysed to idenfity the best one.
+
+## 4.1. Exploring and cleaning the dataset
 Sections 3.2.1 and 3.2.2 describe both the cleaning and the analysis process that has been followed for the two files contained in the dataset.
 
-### 3.2.1. Exploring and cleaning "outcomes.tsv"
+### 4.1.1. Exploring and cleaning "outcomes.tsv"
 
 The file does not contain any null values. The columns "retail", "price" and "finalprice" are all expressed in dollars, which the columns "bidincrement" and "bidfee" are both expressed in cents. These last two columns have been converted to dollars. 
 
@@ -178,7 +174,7 @@ The profit ratio for special dates has also been analyzed. These include the fed
 
 Considering only the day of the week (Monday-Sunday), the highest profit ratio is obtained on Friday, while the lowest positive ratio is obtained on Tuesday. Nevertheless, the values are pretty similar throughout all days of the week.
 
-### 3.2.2. Exploring and cleaning "traces.tsv"
+### 4.1.2. Exploring and cleaning "traces.tsv"
 This file is based on traces of live auctions that the authors of the dataset recorded using their own recording infrastructure. It comprises 7,352 auctions conducted between October 1, 2009 and December 12, 2009. The traces include detailed bidding information for each auction.
 
 Generally, it can be observed that when an auction is about to end, a few users place bids consecutively until one of them decides to keep bidding while the others do not.
@@ -199,7 +195,7 @@ Nevertheless, for the auctions contained in the traces, the mean number of bids 
 
 For the auctions recorded in the traces, the mean profit obtained by Swoopo over the retail price of the items in the auctions that were won by placing the final bid with a Bid Butler is around 130$. The mean profit obtained by Swoopo for the auctions that were not won by placing the final bid with a Bid Butler is much lower, around 64$. Therefore, the fact that users choose to use Bid Butlers to win auctions is benefitial for Swoopo in terms of profit.
 
-## 3.3. Obtaining the product categories
+## 4.2. Obtaining the product categories
 The column "desc" in the dataset contains a description about the product that is auctioned. Most of the products that are auctioned in the dataset are electronics (mobile phones, video games, laptops, televisions, etc.), but the dataset does not specify any category to which each product belongs to. This could be useful information, because it may ocurr that the auction results are different depending on the category of the product that is being offered.
 
 Amazon.com is one of the largest Internet retailer in the world and sells or used to sell most of the products contained in the dataset. It also assigns a product category to each one of the products that it sells. This category could be useful to complete the missing product category information for the products contained in the dataset, and web scraping methods can be used to extract those categories.
@@ -208,7 +204,7 @@ The process that has been implemented to extract the product categories first ob
 
 This process is repeated for each unique item contained in the dataset. The fields contained in the original dataset to describe the product (columns "item" and "desc") are then saved in a text file along with the extracted product category and the Amazon link from where the category has been extracted (in case that it is needed to extract more information from the same link in the future, such as product characteristics, product reviews, etc).
 
-## 3.4. Transforming the product categories to word embedding vectors
+## 4.3. Transforming the product categories to word embedding vectors
 As an example, the product with the description "PSP Slim & Lite Sony Piano Black" contained in the dataset is associated to the following product category "Video Games > Sony PSP> Consoles". However, it is necessary to find a way to introduce this information as input for the prediction model. 
 
 Google's pre-trained Word2Vec model includes word vectors for a vocabulary of 3 million words and phrases that they trained on roughly 100 billion words from a Google News dataset.
@@ -219,7 +215,7 @@ Given the product category string, each single word contained in the string is a
 
 After having performed this process for all of the items in the dataset, the final vectors have been saved in a new file, so that it is easy to have access to them in the future.
 
-## 3.5. Building a prediction model for the final selling price of the auctions
+## 4.4. Building a prediction model for the final selling price of the auctions
 In this Section, different sets of prediction models to predict the final selling price of an auction before it starts have been built.
 
 Each set is compossed of the following types of predictors: a random forest regressor, a k-neighbors regressor, a decision tree regressor, a linear regression and a RANSAC regressor.
@@ -228,12 +224,12 @@ The final selling price of an auction depends on a lot of things: the users that
 
 The dataset has been divided into different parts for the training and the testing phases, and 5-fold cross-validation has been applied so that the resulting quality metrics are more reliable. The metrics that have been calculated are the mean absolute error and the median absolute error. The median absolute error is not highly influenced by outliers.
 
-### 3.5.1. Single model - Without having into account the product categories
+### 4.4.1. Single model - Without having into account the product categories
 The first set of models that has been built does not take into account the product categories. The input variables for the model are: the retail price of the item, the bid increment, the bid fee, and the flags that indicate whether the auction is a click-only auction, a beginner auction, a fixed-price auction or and end-price auction.
 
 For this set of models, the one with the best results in terms of the median absolute error is the RANSAC regressor. The decision tree regresor and the random forest regressor both present good results for the two metrics. The k-neighbors regressor performs alright, but worse than the other two. The worst results are obtained with the linear regression, probably because it is more sensitive to outliers than the others.
 
-### 3.5.2. Single Model - Clustering by product categories
+### 4.4.2. Single Model - Clustering by product categories
 A second set of models that have into account the product categories have been built. As specified in previous sections, with the use of the product description available for each product in the column "desc" of the dataset, the Amazon product category has been obtained. A word embedding vector representing the product category has been calculated based on Google's pre-trained Word2Vec model. The distances defined by these vectors can be used to perform a distance-based clustering. For these models, a K-Means clustering has been used to group the products belonging to semantically similar categories.
 
 The idea behind categorizing the products is that, if the final selling price of the items have similar patterns for similar products, a prediction model will perform better if a grouping based on the product categories is given as input. In this case, the input is the cluster identifier that each product belongs to. Since this is a categorical integer feature, a one-hot encoder has been used.
@@ -248,7 +244,7 @@ Nevertheless, this set of models requires a bigger effort, since a preprocessing
 
 Furthermore, during the training part of the model, the product category clusters are obtained, and these clusters are the ones that are used each time that a new prediction is made. After some time, more and more new products will begin to be auctioned, which will not have been considered to form the clusters. Because of this, the clusters may eventually become outdated, and the models will perform worse. Therefore, appart from the preprocessing step, using the product categories also involves having to retrain the prediction models from time to time so that clusters are updated.
 
-### 3.5.3. Multiple models - Clustering by product categories
+### 4.4.3. Multiple models - Clustering by product categories
 A third set of models that have into account the product categories has been built. The difference between this set of models and the one explained in Section 3.5.2 is that instead of using a single model for all items, a different prediction model is used for each different product category (i.e., each cluster).
 
 For this set of models, the model with the best results in terms of the median absolute error is the RANSAC regressor. Nevertheless, the random forest regressor performs similarly in terms of the median absolute error, and performs way better in terms of the mean absolute error. It is closely followed by the decision tree regresor, which is easier to interpret but is also more likely to overfit the data. The k-neighbors regressor is the next one with the better results, followed by the linear regression with the worst results by far.
@@ -265,7 +261,7 @@ In this case, the metrics have been calculated as the average results between th
 
 In conclusion, using a different prediction model for each cluster may be interesting when the amount of training data is big, but if this is not the case, it is better to use a single prediction model for all clusters.
 
-### 3.5.4. Single model - Clustering by product categories and retail prices
+### 4.4.4. Single model - Clustering by product categories and retail prices
 A fourth set of models that have into account the product categories have been built. In this case, a single prediction model is used to make the predictions. The difference is that the product category clusters have not only been built with the word embedding vector representing the product category, but also with the retail price of the item.
 
 This has been done to divide the products not only by their category, but also by their retail price. For example, mobile phone auctions can consist on high-end and mid-range mobile phones. The product category in both cases is mobile phones, but the selling price of high-end mobile phones will likely be higher than for mid-range mobile phones. Therefore, if different clusters are created for these two cases, the prediction model may perform better.
@@ -284,14 +280,14 @@ Appart from the preprocessing steps, during the training part of the model, the 
 
 For the given dataset, this set of models is not interesting, since it is more complex and performs worse than some of the set of models explained in other sections. As the amount of data increases, it could be interesting to analyse the performance of this set of models again.
 
-### 3.5.5. Multiple models - Clustering by product categories and retail prices
+### 4.4.5. Multiple models - Clustering by product categories and retail prices
 A fith set of models that calculate clusters based on the product categories and retail prices has been built. The difference between this set of models and the previous one is that instead of using a single model for all items, a different prediction model is used for each different cluster.
 
 For this set of models, the model with the best results in terms of the median absolute error is the RANSAC regressor, while the model with the best results in terms of the mean absolute error is the random forest regressor. The results for the decision tree regressor are very similar to the ones obtained with the random forest regressor. The k-neighbors regressor results are, although worse, very similar too. The worst results are obtained with the linear regression.
 
 As compared with Section 3.5.4 in which a single model is used, the results obtained with multiple models in this section are better, but in general, the results are worse than the ones obtained with the set of models in other sections. For the given dataset, this set of models is not interesting, since it is more complex and performs worse than some of the set of models explained in other sections. As the amount of data increases, it could be interesting to analyze the performance of this set of models again.
 
-### 3.5.6. Choosing and optimizing the final model
+### 4.4.6. Choosing and optimizing the final model
 In general, the random forest regressor and the decision tree regressor are the algorithms that have provided the best results. These two models are relatively robust to outliers, since they isolate atypical observations into small leaves. The random forest regressor generally performs a bit better than the decision tree regressor and is less likely to overfit the data. The disadvantage is that random forest regressor are more difficult to interpret than decision tree regressors.
 
 Two different clustering options have been analyzed: one that uses the word embedding vectors to cluster the items according to their product categories, and another one that, appart from the word embedding vectors, it also uses the retail prices of the items to obtain the clusters. With the available data, the model that obtains the clusters by only using as input the word embedding vectors performs better. Moreover, it also requires less preprocessing steps and having to retrain the model less often.
@@ -315,7 +311,7 @@ The prediction model metrics results for the best combination of variables found
 Median absolute error = 10.37 $
 Mean absolute error = 28.29 $
 ```
-# 4. Conclusions
+# 5. Conclusions
 As indicated in [Section 3.2](#32-exploring-and-cleaning-the-dataset), Swoopo obtains a negative profit (i.e., Swoopo obtains less money for the auction than the retail price of the item) for 47.53% of the auctions. The number of bids placed in an auction can be calculated as the final price of the auction divided by the bid price increment. The total money that Swoopo obtains for an auction is calculated as the number of bids placed multiplied by the bid fee, plus the final selling price of the item that is paid by the winner. Since both the bid fee and the bid price increment are known variables, the fact whether Swoopo losses or wins money for a certain auction can be directly derived if the final selling price of the auction is known. The prediction model developed in [Section 3.5.5](#355-choosing-and-optimizing-the-final-model) can be used to predict the selling price of an auction. These predictions could be used to decide whether to offer certain auctions or not depending on whether the profit would be positive or negative based on the prediction results. This could dramatically lower the percentage of auctions for which Swoopo losses money.
 
 As mentioned in [Section 3.2](#32-exploring-and-cleaning-the-dataset), in average, the benefit that the winner obtains over the retail price of the item is around 160$. This is a very positive piece of news for the participants. Perhaps the data about the benefit that the each winner obtained over the retail price of the item for every auction could be made publicly available to encourage users to participate.
@@ -336,7 +332,7 @@ The final prediction model obtained in [Section 3.5.6](#355-choosing-and-optimiz
 
 In conclusion, insights that can help Swoopo to improve its business in terms of profit and management have been found in this Master Thesis.
 
-# 5. Front-end
+# 6. Front-end
 A dashboard has been created in Tableau in order to provide a visualization tool to facilitate the analysis of the data. The dashboard can be found in this GitHub folder "dashboard.twb". As the input data source, the dashboard uses the two files mentioned in [Section 3.1](#31-requirements-and-steps-to-run-the-project), and performs an inner join of the two files. Therefore, the input data comprises 7,352 auctions conducted between October 1, 2009 and December 12, 2009, along with traces of the detailed bidding information for each auction.
 
 The following image shows a preview of the dashboard. The sections contained in the dashboard are described after the image.
@@ -365,7 +361,7 @@ When a specific piece of the pie chart is selected in section "E" of the dashboa
 
 ![](/images/dashboard_04.jpg?raw=true)
 
-# 6. Future Work
+# 7. Future Work
 Here are several ideas about how this project could be improved in the future:
   - **User behaviour analysis**: previous researchers have investigated the impact of aggressive bidding, used in an attempt to signal a high valuation to deter other auction participants, on the probability of winning an auction. It could be interesting to prove their results with this dataset, and observe if they apply. 
   
