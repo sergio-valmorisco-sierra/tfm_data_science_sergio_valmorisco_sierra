@@ -339,7 +339,7 @@ The final prediction model obtained in [Section 3.5.6](#355-choosing-and-optimiz
 In conclusion, insights that can help Swoopo to improve its business in terms of profit and management have been found in this Master Thesis.
 
 # 5. Front-end
-![](https://github.com/sergio-valmorisco-sierra/tfm_data_science_sergio_valmorisco_sierra/tree/master/images/dashboard_01.jpg)
+![](/images/dashboard_01.jpg?raw=true)
 ![](https://github.com/sergio-valmorisco-sierra/tfm_data_science_sergio_valmorisco_sierra/tree/master/images/dashboard_02.jpg)
 ![](https://github.com/sergio-valmorisco-sierra/tfm_data_science_sergio_valmorisco_sierra/tree/master/images/dashboard_03.jpg)
 ![](https://github.com/sergio-valmorisco-sierra/tfm_data_science_sergio_valmorisco_sierra/tree/master/images/dashboard_04.jpg)
