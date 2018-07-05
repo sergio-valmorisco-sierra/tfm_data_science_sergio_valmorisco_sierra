@@ -14,6 +14,8 @@ In this example, user A has paid 30$ (number of bids placed by user A multiplied
 
 Swoopo was one of the most famous pay-per-bid auction commercial websites up to 2011. In order to participate in auctions, registered users had to first buy bids (called credits). Each bid extended the countdown clock by 10–20 seconds, so auctions could theoretically continue on indefinitely.
 
+![](/images/swoopo.png?raw=true)
+
 Appart from placing manual bids, Swoopo also provided the possibility of placing bids with Bid Butlers. These were automatic bidding agents provided by the Swoopo interface that bidded according to user-defined instructions. Users were able to define starting and ending price limits for which automated bids shall be placed, as well as the top number of bids that the Bid Butler was allowed to place. Bid Butlers placed automated bids when the auction timer dropped below 10 seconds.
 
 Swoopo also offered special types of auctions:
