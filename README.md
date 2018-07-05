@@ -24,13 +24,13 @@ Swoopo also offered special types of auctions:
   - Fixed-price auctions: auctions in which the selling price was fixed from the beginning.
   - End-price auctions: also called 100%-off auction. In these auctions the final selling price of the product was zero, and the revenue for Swoopo came exclusively from the bids that were placed.
 
-The main topic of this Master Thesis is the development of a prediction model that allows predicting the final selling price of an auction in Swoopo (or other auction sites that work in a similar way) before it starts. Having an estimation of the final selling price of an auction could be very helpful for auction site owners.
+The main topic of this Master Thesis is the development of a prediction model that allows predicting the final selling price of an auction in Swoopo before it starts. Having an estimation of the final selling price of an auction could be very helpful for auction site owners.
 
-Auctions, as compared to other sales, are associated to a big uncertainty. The final selling price of an auction depends on a lot of factors and can vary greatly between two different auctions, even when the item that is auctioned is the same and the two auctions take place at a similar point of time.
+Auctions, as compared to other sales, are associated to a big uncertainty. The final selling price of an auction depends on a lot of factors and can vary greatly between two different auctions, even when the item that is auctioned is the same and the two auctions take place during close points in time.
 
 If relatively accurate estimations of the selling prices of the items can be made, this can help auction site owners to take important business decisions. Consequently, this is a relevant problem.
 
-The dataset used in this Master Thesis contains information about Swoopo's auctions and can be found in the following link: http://people.bu.edu/zg/swoopo.html
+The dataset used in this Master Thesis contains information about Swoopo's auctions and can be found in the following [link](http://people.bu.edu/zg/swoopo.html).
 
 The dataset consists of two files:
   - **outcomes.tsv**: this file is based on information published directly by Swoopo, which contains limited information about an auction: the description of the product, its retail price and selling price, the winner of the auction, the number of placed bids, etc.
