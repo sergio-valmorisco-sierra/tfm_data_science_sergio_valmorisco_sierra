@@ -340,9 +340,9 @@ In conclusion, insights that can help Swoopo to improve its business in terms of
 
 # 5. Front-end
 ![](/images/dashboard_01.jpg?raw=true)
-![](https://github.com/sergio-valmorisco-sierra/tfm_data_science_sergio_valmorisco_sierra/tree/master/images/dashboard_02.jpg)
-![](https://github.com/sergio-valmorisco-sierra/tfm_data_science_sergio_valmorisco_sierra/tree/master/images/dashboard_03.jpg)
-![](https://github.com/sergio-valmorisco-sierra/tfm_data_science_sergio_valmorisco_sierra/tree/master/images/dashboard_04.jpg)
+![](/images/dashboard_02.jpg?raw=true)
+![](/images/dashboard_03.jpg?raw=true)
+![](/images/dashboard_04.jpg?raw=true)
 
 # 6. Future Work
 
